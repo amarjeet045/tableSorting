@@ -34,6 +34,7 @@ export default class DetailPage extends Component {
   render() {
     var newdata = this.state.data;
     return (
+        
       <table className="table">
         <thead>
           <tr>

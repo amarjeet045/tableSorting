@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import DetailPage from './comp/DetailPage'
+import Paginations from './comp/Pagianations';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 export default class App extends Component {
   render() {
@@ -8,7 +9,7 @@ export default class App extends Component {
       <div className = "container">
       <Switch>
 
-      <Route exact path = "/" component = {DetailPage} />
+      <Route exact path = "/" component = {Paginations} />
       
       </Switch>
       </div>
