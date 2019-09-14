@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Table from './Tables';
-
+import UserDetails from './UserDetails';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -28,12 +28,30 @@ export default class UserDetail extends Component {
         })
       }
     render() {
+        var newDatas = this.state.items
+        
+        const UserPagi = newDatas.filter((account)=>account.id==this.props.match.params.id)
+        console.log(UserPagi)
         return (
-            <div>
-                <Table items={this.state.items}/>
-                
+            <>
+             {UserPagi.map(function(data,index){
+                 return(
+                    <div className="card">
+                    <h5>First Name <span style={{float:"right"}}>{data.first_name}</span></h5>
+                    <h5>Last Name  <span style={{float:"right"}}>{data.last_name}</span></h5>
+                    <h5>Company Name <span style={{float:"right"}}>{data.company_name}</span></h5>
+                    <h5>State <span style={{float:"right"}}>{data.state}</span></h5>
+                    <h5>City <span style={{float:"right"}}>{data.city}</span></h5>
+                    <h5>Zip <span style={{float:"right"}}>{data.zip}</span> </h5>
+                    <h5>Email <span style={{float:"right"}}>{data.email}</span></h5>
+                    <h5>Web <span style={{float:"right"}}>{data.web} </span></h5>
+                    <h5>Age <span style={{float:"right"}}>{data.age}</span></h5>
+                </div>
+                 );
+             })}
+            
                
-            </div>
+            </>
         )
     }
 }

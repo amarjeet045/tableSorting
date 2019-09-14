@@ -1,7 +1,7 @@
 /*eslint-env jquery*/
 import React, { Component } from "react";
-import DetailPage from './DetailPage';
-import {Link} from 'react-router-dom'
+import DetailPage from "./DetailPage";
+import { Link } from "react-router-dom";
 export default class Paginations extends Component {
   constructor() {
     super();
@@ -13,7 +13,8 @@ export default class Paginations extends Component {
       lowerPageBound: 0,
       isPrevBtnActive: "disabled",
       isNextBtnActive: "",
-      pageBound: 10
+      pageBound: 10,
+      search:''
     };
     this.handleClick = this.handleClick.bind(this);
     this.btnDecrementClick = this.btnDecrementClick.bind(this);
@@ -23,14 +24,14 @@ export default class Paginations extends Component {
     // this.componentDidMount = this.componentDidMount.bind(this);
     this.setPrevAndNextBtnClass = this.setPrevAndNextBtnClass.bind(this);
     this.onSort = this.onSort.bind(this);
-    this.numberSort= this.numberSort.bind(this);
+    this.numberSort = this.numberSort.bind(this);
   }
-  
+
   componentDidMount() {
     fetch("https://demo9197058.mockable.io/users")
       .then(res => res.json())
       .then(json => {
-          console.log(json);
+      
         this.setState({
           data: json
         });
@@ -99,36 +100,47 @@ export default class Paginations extends Component {
     this.setPrevAndNextBtnClass(listid);
   }
   btnNextClick() {
-    if((this.state.currentPage +1) > this.state.upperPageBound ){
-        this.setState({upperPageBound: this.state.upperPageBound + this.state.pageBound});
-        this.setState({lowerPageBound: this.state.lowerPageBound + this.state.pageBound});
+    if (this.state.currentPage + 1 > this.state.upperPageBound) {
+      this.setState({
+        upperPageBound: this.state.upperPageBound + this.state.pageBound
+      });
+      this.setState({
+        lowerPageBound: this.state.lowerPageBound + this.state.pageBound
+      });
     }
     let listid = this.state.currentPage + 1;
-    this.setState({ currentPage : listid});
+    this.setState({ currentPage: listid });
     this.setPrevAndNextBtnClass(listid);
-}
-onSort(event, sortKey) {
-  const data = this.state.data;
-  data.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
-  this.setState({ data });
-}
-numberSort(event,sortkey1){
+  }
+  onSort(event, sortKey) {
     const data = this.state.data;
-    data.sort((a,b)=> a[sortkey1]-b[sortkey1]);
-    this.setState({data});
+    data.sort((a, b) => a[sortKey].localeCompare(b[sortKey]));
+    this.setState({ data });
+  }
+  numberSort(event, sortkey1) {
+    const data = this.state.data;
+    data.sort((a, b) => a[sortkey1] - b[sortkey1]);
+    this.setState({ data });
   }
   render() {
-      var newData = this.state.data
-    const {  currentPage, todosPerPage,upperPageBound,lowerPageBound,isPrevBtnActive,isNextBtnActive } = this.state;
+    var newData = this.state.data;
+    const {
+      currentPage,
+      todosPerPage,
+      upperPageBound,
+      lowerPageBound,
+      isPrevBtnActive,
+      isNextBtnActive
+    } = this.state;
     const indexOfLastTodo = currentPage * todosPerPage;
     const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
     const currentTodos = newData.slice(indexOfFirstTodo, indexOfLastTodo);
 
-    const renderTodos =
-    <table>
-      <thead>
-        <tr>
-        <th onClick={e => this.onSort(e, "first_name")}>First Name</th>
+    const renderTodos = (
+      <table>
+        <thead>
+          <tr>
+            <th onClick={e => this.onSort(e, "first_name")}>First Name</th>
             <th onClick={e => this.onSort(e, "last_name")}>Last value</th>
             <th onClick={e => this.onSort(e, "company_name")}>Company Name</th>
             <th onClick={e => this.onSort(e, "state")}>State</th>
@@ -138,14 +150,13 @@ numberSort(event,sortkey1){
             <th onClick={e => this.onSort(e, "web")}>Web</th>
             <th onClick={e => this.numberSort(e, "age")}>Age</th>
             <th>Details</th>
-        </tr>
-      </thead>
-    
-    <tbody>
-     {currentTodos.map((account, index) => {
-      return (
-        
-        <tr key={index} data-item={account}>
+          </tr>
+        </thead>
+
+        <tbody>
+          {currentTodos.map((account, index) => {
+            return (
+              <tr key={index} data-item={account}>
                 <td data-title="First NAme">{account.first_name}</td>
                 <td data-title="Last name">{account.last_name}</td>
                 <td data-title="company NAme">{account.company_name}</td>
@@ -155,75 +166,122 @@ numberSort(event,sortkey1){
                 <td data-title="email">{account.email}</td>
                 <td data-title="web">{account.web}</td>
                 <td data-title="age">{account.age}</td>
-                <td> <Link to = {`user/${account.id}`} className="btn btn-dark btn-block">
-                        view Details
-                    </Link></td>
+                <td>
+                  {" "}
+                  <Link
+                    to={`user/${account.id}`}
+                    className="btn btn-dark btn-block"
+                  >
+                    view Details
+                  </Link>
+                </td>
               </tr>
-              
-      )
-    })
-  }
-    </tbody>
-    </table>
-    
+            );
+          })}
+        </tbody>
+      </table>
+    );
+
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(newData.length / todosPerPage); i++) {
       pageNumbers.push(i);
     }
 
     const renderPageNumbers = pageNumbers.map(number => {
-        if(number === 1 && currentPage === 1){
-            return(
-                <li key={number} className='active' id={number}><a href='#' id={number} onClick={this.handleClick}>{number}</a></li>
-            )
-        }
-        else if((number < upperPageBound + 1) && number > lowerPageBound){
-            return(
-                <li key={number} id={number}><a href='#' id={number} onClick={this.handleClick}>{number}</a></li>
-            )
-        }
+      if (number === 1 && currentPage === 1) {
+        return (
+          <li key={number} className="active" id={number}>
+            <a href="#" id={number} onClick={this.handleClick}>
+              {number}
+            </a>
+          </li>
+        );
+      } else if (number < upperPageBound + 1 && number > lowerPageBound) {
+        return (
+          <li key={number} id={number}>
+            <a href="#" id={number} onClick={this.handleClick}>
+              {number}
+            </a>
+          </li>
+        );
+      }
     });
     let pageIncrementBtn = null;
-    if(pageNumbers.length > upperPageBound){
-        pageIncrementBtn = <li className=''><a href='#' onClick={this.btnIncrementClick}> &hellip; </a></li>
+    if (pageNumbers.length > upperPageBound) {
+      pageIncrementBtn = (
+        <li className="">
+          <a href="#" onClick={this.btnIncrementClick}>
+            {" "}
+            &hellip;{" "}
+          </a>
+        </li>
+      );
     }
     let pageDecrementBtn = null;
-    if(lowerPageBound >= 1){
-        pageDecrementBtn = <li className=''><a href='#' onClick={this.btnDecrementClick}> &hellip; </a></li>
+    if (lowerPageBound >= 1) {
+      pageDecrementBtn = (
+        <li className="">
+          <a href="#" onClick={this.btnDecrementClick}>
+            {" "}
+            &hellip;{" "}
+          </a>
+        </li>
+      );
     }
     let renderPrevBtn = null;
-    if(isPrevBtnActive === 'disabled') {
-        renderPrevBtn = <li className={isPrevBtnActive}><span id="btnPrev"> Prev </span></li>
-    }
-    else{
-        renderPrevBtn = <li className={isPrevBtnActive}><a href='#' id="btnPrev" onClick={this.btnPrevClick}> Prev </a></li>
+    if (isPrevBtnActive === "disabled") {
+      renderPrevBtn = (
+        <li className={isPrevBtnActive}>
+          <span id="btnPrev"> Prev </span>
+        </li>
+      );
+    } else {
+      renderPrevBtn = (
+        <li className={isPrevBtnActive}>
+          <a href="#" id="btnPrev" onClick={this.btnPrevClick}>
+            {" "}
+            Prev{" "}
+          </a>
+        </li>
+      );
     }
     let renderNextBtn = null;
-    if(isNextBtnActive === 'disabled') {
-        renderNextBtn = <li className={isNextBtnActive}><span id="btnNext"> Next </span></li>
-    }
-    else{
-        renderNextBtn = <li className={isNextBtnActive}><a href='#' id="btnNext" onClick={this.btnNextClick}> Next </a></li>
+    if (isNextBtnActive === "disabled") {
+      renderNextBtn = (
+        <li className={isNextBtnActive}>
+          <span id="btnNext"> Next </span>
+        </li>
+      );
+    } else {
+      renderNextBtn = (
+        <li className={isNextBtnActive}>
+          <a href="#" id="btnNext" onClick={this.btnNextClick}>
+            {" "}
+            Next{" "}
+          </a>
+        </li>
+      );
     }
 
     return (
       <>
-      <table className="table">
-        
+      
+      
+        <table className="table">
           <tbody>
             <tr>{renderTodos}</tr>
-            
           </tbody>
-        
-      </table>
-      <ul className="pagination">
-      {renderPrevBtn}
-      {pageDecrementBtn}
-      {renderPageNumbers}
-      {pageIncrementBtn}
-      {renderNextBtn}
-    </ul>
-    </>
+        </table>
+        <div className="pagination">
+          <ul>
+            {renderPrevBtn}
+            {pageDecrementBtn}
+            {renderPageNumbers}
+            {pageIncrementBtn}
+            {renderNextBtn}
+          </ul>
+        </div>
+      </>
     );
   }
 }
