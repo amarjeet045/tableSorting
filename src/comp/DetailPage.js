@@ -6,7 +6,8 @@ export default class DetailPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [],
+      search:''
     };
     this.onSort = this.onSort.bind(this);
     this.numberSort= this.numberSort.bind(this);
@@ -15,7 +16,7 @@ export default class DetailPage extends Component {
     fetch("https://demo9197058.mockable.io/users")
       .then(res => res.json())
       .then(json => {
-          console.log(json);
+        
         this.setState({
           data: json
         });
@@ -31,10 +32,26 @@ export default class DetailPage extends Component {
       data.sort((a,b)=> a[sortkey1]-b[sortkey1]);
       this.setState({data});
     }
+    UpdateSearch(event){
+      this.setState({search:event.target.value.substr(0,20)});
+    }
   render() {
     var newdata = this.state.data;
+    let filtered=newdata.filter(
+      (datas) =>{
+        return datas.first_name.indexOf(this.state.search)!==-1;
+      }
+
+
+    );
+    console.log(filtered)
     return (
-        
+        <>
+        <input 
+      type="text"
+      value={this.state.search}
+      onChange={this.UpdateSearch.bind(this )}
+      />
       <table className="table">
         <thead>
           <tr>
@@ -53,7 +70,7 @@ export default class DetailPage extends Component {
           </tr>
         </thead>
         <tbody>
-          {newdata.map(function(account, index) {
+          {filtered.map(function(account, index) {
             return (
               <tr key={index} data-item={account}>
                 <td data-title="First NAme">{account.first_name}</td>
@@ -73,6 +90,7 @@ export default class DetailPage extends Component {
           })}
         </tbody>
       </table>
+      </>
     );
   }
 }

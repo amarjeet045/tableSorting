@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import DetailPage from "./DetailPage";
 import { Link } from "react-router-dom";
+import {Navbar,Container} from 'react-bootstrap';
 export default class Paginations extends Component {
   constructor() {
     super();
@@ -40,6 +41,9 @@ export default class Paginations extends Component {
   componentDidUpdate() {
     $("ul li.active").removeClass("active");
     $("ul li#" + this.state.currentPage).addClass("active");
+  }
+  UpdateSearch(event){
+    this.setState({search:event.target.value.substr(0,20)});
   }
   handleClick(event) {
     let listid = Number(event.target.id);
@@ -134,8 +138,13 @@ export default class Paginations extends Component {
     } = this.state;
     const indexOfLastTodo = currentPage * todosPerPage;
     const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-    const currentTodos = newData.slice(indexOfFirstTodo, indexOfLastTodo);
-
+    let filtered=newData.filter(
+      (datas) =>{
+        return datas.first_name.indexOf(this.state.search)!==-1;
+      }
+    );
+    const currentTodos = filtered.slice(indexOfFirstTodo, indexOfLastTodo);
+    
     const renderTodos = (
       <table>
         <thead>
@@ -261,11 +270,25 @@ export default class Paginations extends Component {
           </a>
         </li>
       );
+      
+
     }
 
     return (
       <>
-      
+      <Container>
+                <Navbar expand="lg" bg="primary" variant="dark">
+                <Navbar.Brand ></Navbar.Brand>
+                </Navbar>
+      </Container>
+        <br ></br>
+      <input 
+      type="text"
+      value={this.state.search}
+      onChange={this.UpdateSearch.bind(this )}
+      />
+      <br/>
+      <br />
       
         <table className="table">
           <tbody>

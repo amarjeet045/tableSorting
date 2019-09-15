@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Table from './Tables';
-import UserDetails from './UserDetails';
 
+import {Navbar,Container} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import {Link} from 'react-router-dom';
 export default class UserDetail extends Component {
     constructor(props){
         super(props);
@@ -31,9 +31,15 @@ export default class UserDetail extends Component {
         var newDatas = this.state.items
         
         const UserPagi = newDatas.filter((account)=>account.id==this.props.match.params.id)
-        console.log(UserPagi)
+        
         return (
             <>
+            <Container>
+                <Navbar expand="lg" variant="light" bg="light">
+                <Link to="/" className="btn btn-dark btn-sm mb-4">Go back</Link>
+               
+                </Navbar>
+            </Container>
              {UserPagi.map(function(data,index){
                  return(
                     <div className="card">
