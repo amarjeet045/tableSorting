@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import DetailPage from "./DetailPage";
 import { Link } from "react-router-dom";
 import {Navbar,Container} from 'react-bootstrap';
+import { TextField } from 'react-md';
 export default class Paginations extends Component {
   constructor() {
     super();
@@ -146,10 +147,10 @@ export default class Paginations extends Component {
     const currentTodos = filtered.slice(indexOfFirstTodo, indexOfLastTodo);
     
     const renderTodos = (
-      <table>
+      <table  >
         <thead>
-          <tr>
-            <th onClick={e => this.onSort(e, "first_name")}>First Name</th>
+          <tr >
+            <th  onClick={e => this.onSort(e, "first_name")}>First Name</th>
             <th onClick={e => this.onSort(e, "last_name")}>Last value</th>
             <th onClick={e => this.onSort(e, "company_name")}>Company Name</th>
             <th onClick={e => this.onSort(e, "state")}>State</th>
@@ -173,7 +174,7 @@ export default class Paginations extends Component {
                 <td data-title="city">{account.city}</td>
                 <td data-title="zip">{account.zip}</td>
                 <td data-title="email">{account.email}</td>
-                <td data-title="web">{account.web}</td>
+                <td data-title="web"><a href= {`user/${account.id}`}>{account.web}</a></td>
                 <td data-title="age">{account.age}</td>
                 <td>
                   {" "}
@@ -276,21 +277,35 @@ export default class Paginations extends Component {
 
     return (
       <>
-      <Container>
-                <Navbar expand="lg" bg="primary" variant="dark">
-                <Navbar.Brand ></Navbar.Brand>
-                </Navbar>
-      </Container>
-        <br ></br>
+     
+        
+        <nav className="navbar navbar-dark bg-primary" >
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarToggleExternalContent"
+            aria-controls="navbarToggleExternalContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+            
+          </button>
+          
+        </nav>
+     
+       <br />
+     
       <input 
       type="text"
       value={this.state.search}
       onChange={this.UpdateSearch.bind(this )}
+      style={{marginLeft:"1.5%"}}
       />
-      <br/>
       <br />
-      
-        <table className="table">
+      <br />
+        <table style={{marginLeft:"1%"}} >
           <tbody>
             <tr>{renderTodos}</tr>
           </tbody>
@@ -304,6 +319,7 @@ export default class Paginations extends Component {
             {renderNextBtn}
           </ul>
         </div>
+      
       </>
     );
   }

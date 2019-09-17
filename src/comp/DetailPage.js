@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Table from "./Tables";
+
 import {Link} from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 export default class DetailPage extends Component {
